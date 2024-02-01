@@ -7,6 +7,7 @@ trigger AccountTrigger on Account (before update) {
         
     }
 } 
+
       //En kapsamli kalip
     trigger XXXXXXTrigger on XXXXXX (before insert , before update , before delete , after insert , after update, after delete, after undelete ) {
   
