@@ -428,3 +428,26 @@ Integer yearToCheck = 2021;
                 system.debug('LEAP YEAR');
                 
                     }else{system.debug('NOT A LEAP YEAR');}
+
+
+
+
+
+integer score= 69;
+string grade;
+if (score >= 0 && score < 40) {
+             grade= 'Fail';
+        } else if (score < 60) {
+            grade = 'Poor';
+        } else if (score < 80) {
+            grade='Good';
+        } else if (score <= 100) {
+             grade='Excellent';
+        } else {
+             grade='Invalid score';
+        }
+        
+        system.debug ('Your Grade is '+grade);
+
+        
+

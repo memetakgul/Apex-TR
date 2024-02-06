@@ -87,8 +87,9 @@ system.debug(accList.size());
 // ******* DATA BINDING **********
 
 /*
+WHERE fieldName = 'XXXX'
 WHERE fieldName =: variable // tek variablar
-WHERE fieldName IN: variable // listeler icin kullanilir 
+WHERE fieldName IN: listVariable // listeler icin kullanilir 
 WHERE fieldName LIKE : variable //list or any data type 
 id icin LIKE olmaz =: kullanilir
 */
