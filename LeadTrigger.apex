@@ -13,17 +13,63 @@ trigger LeadTrigger on Lead (before insert , before update , before delete , aft
         
         LeadTriggerHandler.industryValidation(trigger.new);
             
-        
+        //While creating a Lead assign ‘Other’ if Lead Source is null. (Before insert)
+            for(lead newLd:trigger.new){
+                    if(newLd.LeadSource ==null){
+                        newLd.LeadSource ='Other';
+                    }
+            }
+                       
+            
         }
         WHEN BEFORE_UPDATE  { 
        
         	//LeadTriggerHandler.industryControl(trigger.new);
         	
         LeadTriggerHandler.industryValidation(trigger.new);
+            
+            //Create an error (Warning) trigger when a Lead is updated from 
+            //'Open - Not Contacted' status to 'Closed - Not Converted' status. (Validation )
+            
+            for(lead newLead : trigger.new){
+                lead oldLead=trigger.oldMap.get(newLead.id);
+                
+                if(newLead.Status == 'Open - Not Contacted' 
+                  && oldLead.Status == 'Closed - Not Converted'){
+                    
+                      newLead.addError('Open status Leads can not be converted to Close'); 
+                        
+                    }
+                }
+            }
 
-        }
+        
         WHEN BEFORE_DELETE  { }
-        WHEN AFTER_INSERT   { }
+        WHEN AFTER_INSERT   {
+            
+        //After creating Lead record , create a Task. (After insert)
+       
+         List<Task> taskList = new List<Task>();
+    
+        for (Lead newLead : Trigger.new) {
+             // SELECT Id, WhoId, WhatId, Subject, Status, Priority, ActivityDate FROM Task
+            Task newTask = new Task();
+            
+            newTask.Subject = 'Follow up with Lead: ' + newLead.lastName;
+            newTask.OwnerId = newLead.OwnerId; //Kime assign edilecegi
+            newTask.WhoId = newLead.Id ; //Yeni olusan Lead id si             
+            newTask.ActivityDate = Date.today().addDays(5); //Date.today()+ 7  
+            
+            taskList.add(newTask);
+        }
+    
+            if (!taskList.isEmpty()) {
+                insert taskList;
+            }
+            
+            
+            
+        }
         WHEN AFTER_UPDATE   { }
         WHEN AFTER_DELETE   { }
         WHEN AFTER_UNDELETE { 
@@ -38,40 +84,6 @@ trigger LeadTrigger on Lead (before insert , before update , before delete , aft
         }
  
     }
-       
-}
-
-
-
-
-// ------------LeadTriggerHandler---------
-
-
-
-public class LeadTriggerHandler {
-	
-    //When a new lead is created and updated, assign 'Education' if Industry field is null
-    public static void industryControl(list<lead> leadList){
-       
-        for(lead newLd:leadList){
-                if(newLd.Industry==null){//String.isBlank(newLd.Industry)
-                    newLd.Industry='Education';
-                }
-            }
-    } 
-    
-    
-     //If a new Lead is created or updated and if ‘Industry’ filed is null; Give a warning
-    //validation
-    public static void industryValidation(list<lead> leadList){
-       
-        for(lead newLd:leadList){
-                if(newLd.Industry==null){//String.isBlank(newLd.Industry)
-                    //newLd.addError('Industry fieldi bos birakilamaz'); //Sayfa genelinde
-                     newLd.Industry.addError('Industry fieldi bos birakilamaz'); //Field da hata gosterme
-                }
-            }
-    } 
     
     
     

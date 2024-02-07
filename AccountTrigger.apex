@@ -1,5 +1,4 @@
-    
-   trigger AccountTrigger on Account (before insert , before update , before delete , after insert , after update, after delete, after undelete ) {
+trigger AccountTrigger on Account (before insert , before update , before delete , after insert , after update, after delete, after undelete ) {
   
     SWITCH on Trigger.operationType {
         
@@ -15,6 +14,7 @@
             }
         }   
         WHEN BEFORE_UPDATE  { 
+            
             /*
             // Eger accountun type kismi update ediliyor ise
             // ve accountun industry si bos ise
@@ -48,9 +48,34 @@
                 }
                 
             }*/
-        }
+            
+            
+          
+		//•Create a filed named ‘Old Phone’ on account object
+		//•Whenever phone field is updated on Account record
+		//•Then Old Phone filed should also get updated with old version of phone number on account
+          
+            for(account acc : trigger.new){
+                
+             Account oldAcc=trigger.oldMap.get(acc.id);
+                
+                if(acc.Phone!=oldAcc.Phone){
+                    
+                    //acc.Old_Phone__c = oldAcc.Phone != null ? oldAcc.Phone + ', ' + acc.Phone : acc.Phone;  
+                    
+                    if( acc.Old_Phone__c != null && oldAcc.Old_Phone__c.length()<240){
+                        acc.Old_Phone__c =oldAcc.Old_Phone__c+ ' , ' + oldAcc.Phone  ;
+            
+                    }else{
+                           acc.Old_Phone__c = oldAcc.Phone ;
+                          }               
+                }
+              }
+            }
+            
         WHEN BEFORE_DELETE  { }
         WHEN AFTER_INSERT   { 
+            
             /*
             list <contact>cntList=new list <contact>();
             for(account acc2:trigger.new){
@@ -111,55 +136,4 @@
  
     }
         
-}
-    
-
-
-
-
- //   -----AccountTriggerHandler-------
-
-
- public class AccountTriggerHandler {
-
-    public static void industryCheck(List<account> accList , Map<id,account> accOldMap){
-
-        for(account accNew:accList){
-            
-             account accOld=accOldMap.get(accNew.Id);//idsi verilen accountun eski halini getirir
-            
-                if( (accOld.Type != accNew.type) && accNew.Industry==null){
-                        
-                    	accNew.Industry='Education';
-                    }
-            }    
-	}
-     
-    
-    static boolean flag=true;
-  //static integer count = 0;  //kacta defa calismasini istiyorsak kullaniriz
-  
-    public static VOID accRecursionExample(list<account> accTriggerList   ){
-        
-        if( flag   ){
-          flag= false;
-            /*
-              if( count < 3  ){
-              count++;
-            */
-            
-            //try catch ile de cozulur
-               list<account> accList = new List<account>();
-            for(account acc : accTriggerList){
-                account accNew = new Account();
-                accNew.Name=acc.name + ' yeni ';
-               accList.add(accNew);
-            }
-           insert accList;
-        }
-    }
-  
-    
-    
-    
 }
