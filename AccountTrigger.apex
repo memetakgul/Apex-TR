@@ -12,67 +12,41 @@ trigger AccountTrigger on Account (before insert , before update , before delete
                     acc.Industry='Banking';
                 }
             }
+            
+            //Account olusturulurken eger ayni isimli bir account varsa izin verme error mesaji goster
+            
+          AccountTriggerHandler.accNameDublicate(trigger.new);
+            
+            
+           /*
+             Write a trigger on Account, when an account is inserted, automatically account billing
+             address should populate into the account shipping address.
+            When it comes to Account Billing and Shipping Address, we cannot 
+            directly enter the values to the field Address because the Address is split into Street,
+             City, State, PostalCode, and Country.
+            */
+            
+            AccountTriggerHandler.shippingAdressUpdate(trigger.new);
+            
+            
+          
         }   
         WHEN BEFORE_UPDATE  { 
             
-            /*
+            
             // Eger accountun type kismi update ediliyor ise
             // ve accountun industry si bos ise
             // o zaman indusrty kismi education olsun
-            
-            // Version1--Olabildigince ic ice looplardan uzak dur.cok kaynak tuketiyor
-            for(account accOld:trigger.old){
-                for(account accNew:trigger.new){
-                    if( (accOld.Type != accNew.type) && accNew.Industry==null){
-                        accNew.Industry='Education';
-                    }
-                }
-            }
-            
-            //Version2 ---Best Practice---
-            for(account accNew:trigger.new){
-             account accOld=trigger.oldMap.get(accNew.Id);//idsi verilen accountun eski halini getirir
-                if( (accOld.Type != accNew.type) && accNew.Industry==null){
-                        accNew.Industry='Education';
-                    }
-            }*/
-            
+                                 
             AccountTriggerHandler.industryCheck(trigger.new , trigger.oldMap);
             
-            
-            
-        /*
-            for(Account acc : TRIGGER.NEW){
-                if(acc.Industry == null   ){ // String.isBlank(acc.Industry)
-                     acc.Industry='Education';
-                }
-                
-            }*/
-            
-            
-          
-		//•Create a filed named ‘Old Phone’ on account object
+          //•Create a filed named ‘Old Phone’ on account object
 		//•Whenever phone field is updated on Account record
 		//•Then Old Phone filed should also get updated with old version of phone number on account
           
-            for(account acc : trigger.new){
-                
-             Account oldAcc=trigger.oldMap.get(acc.id);
-                
-                if(acc.Phone!=oldAcc.Phone){
-                    
-                    //acc.Old_Phone__c = oldAcc.Phone != null ? oldAcc.Phone + ', ' + acc.Phone : acc.Phone;  
-                    
-                    if( acc.Old_Phone__c != null && oldAcc.Old_Phone__c.length()<240){
-                        acc.Old_Phone__c =oldAcc.Old_Phone__c+ ' , ' + oldAcc.Phone  ;
-            
-                    }else{
-                           acc.Old_Phone__c = oldAcc.Phone ;
-                          }               
-                }
-              }
-            }
-            
+            AccountTriggerHandler.oldPhoneSaving(trigger.new, trigger.oldMap);
+		
+        }            
         WHEN BEFORE_DELETE  { }
         WHEN AFTER_INSERT   { 
             
@@ -87,12 +61,28 @@ trigger AccountTrigger on Account (before insert , before update , before delete
            insert cntList;  
             */
             
-             AccountTriggerHandler.accRecursionExample(trigger.new);
+            
+            ////////----Recursion----///////
+            
+            AccountTriggerHandler.accRecursionExample(trigger.new);
             
             
             
         }
-        WHEN AFTER_UPDATE   { }
+        WHEN AFTER_UPDATE   { 
+            
+            /*
+             Write a trigger on the Account when the Account is updated check all opportunities related to the account.
+             Update all Opportunities Stage to close lost if an opportunity created date is greater than 30 days from 
+            today and stage not equal to close won.
+        	*/
+            
+            AccountTriggerHandler.oppStageUpdate(trigger.newMap);
+        	
+
+               
+        
+        }
         WHEN AFTER_DELETE   { }
         WHEN AFTER_UNDELETE { 
         
