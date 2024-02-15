@@ -20,7 +20,7 @@
 
     
 // today()
-system.debug(date.today());  // 2024-01-02 00:00:00 2024-01-02 00:00:00
+system.debug(date.today());  // 2024-01-02 00:00:00 
 
 // addDays(5)
 date bugun = date.today();
