@@ -262,6 +262,38 @@ public class ContactSayilariTest4DF {
     }
       */  
     
+}
+
+    /////-----DataFactory-----/////
+    public class DataFactory {
+
+    //genel bir tane Data Factory olur icinde record olusturan bir suru method vardir
+    //Data Factory record olustururken manuel olan fieldlar verilir loopup gibi fieldlar verilmez
+    
+    
+   // data for account
+	public static Account getAccount(){
+        
+        Account acc = new Account();
+        acc.name = 'ZZZ';
+        acc.Phone = '1234567';
+        
+        return acc;
+        //method return olarak olusan recordu doner 
+    }
+    
+  // data for contact
+    public static Contact getContact(  ){
+        
+        Contact cnt = New Contact();
+         cnt.LastName = 'aaaaa';
+        cnt.MobilePhone = '1234';
+        
+        return cnt;
+        //method return olarak olusan recordu doner 
+    }  
     
     
 }
+    
+
