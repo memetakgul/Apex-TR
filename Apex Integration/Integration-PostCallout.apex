@@ -1,7 +1,7 @@
 public class MusteriPostCallout {
 
      private static final string API_ENDPOINT = 'https://gorest.co.in/public/v2/users/';
-    private static final string TOKEN = 'Bearer ecdb10b1f0e97d6a298e00ade8c4d468277435885eecfd9622478aa12d919a3f';
+    private static final string TOKEN = 'Bearer ecdb10b1f0e97d6a298e00ade8c4d468277435885eecfd9622478aa1';
     
     public static void musteriGonder(string musteriIsmi, string musteriEmail, string musteriGender, string musteriStatus ){
 	
