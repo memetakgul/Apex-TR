@@ -60,9 +60,13 @@ public class AsynchBatchApex implements Database.Batchable<sObject>{
 
 // 2 //
 
-public class AsynchBatchApex2 implements Database.Batchable<sObject>{
-
-     public Database.QueryLocator start(Database.BatchableContext BC) {
+public class AsyncBatchApex2 implements Database.Batchable<sObject>  , Database.Stateful {
+																	//variable lari sifirlamadan calistir
+     
+    
+    //https://www.sfdcpoint.com/salesforce/batch-apex-example-in-salesforce/
+       
+    public Database.QueryLocator start(Database.BatchableContext BC) {
                 
         
 // NOT   SOQL de isime yaramayacak field getirmeyiniz  bosuna yuk tasimis olursunuz
@@ -74,6 +78,7 @@ public class AsynchBatchApex2 implements Database.Batchable<sObject>{
                                         FROM Account ]); 
     }
      
+    integer counter=1;
     public void execute(Database.BatchableContext BC, List<Account> accList) {
         //Map ile daha guzel olur sadece daha iyi anlasilmasi icin boyle yapildi
        list<contact> cntList = new List<contact>();
@@ -82,7 +87,10 @@ public class AsynchBatchApex2 implements Database.Batchable<sObject>{
                 for(contact cnt: acc.contacts ){
                     if(acc.BillingCountry !=null ){
                       cnt.OtherCountry = acc.BillingCountry; 
-                        cntList.add(cnt);
+                        cnt.Update_Sirasi__c =counter;
+                        counter = counter +1;
+                         cntList.add(cnt);
+                        
                     } 
                 }              
             }
@@ -96,6 +104,23 @@ public class AsynchBatchApex2 implements Database.Batchable<sObject>{
         }
          
     }   
+    
+    
+    /*  2. Yontem
+     
+        List<Contact> cntList = [SELECT Id, Account.BillingCountry FROM Contact WHERE AccountId IN (SELECT Id FROM Account)];
+        
+		for(Contact con : cntList) {
+            con.OtherCountry = con.Account.BillingCountry;
+        }
+         try {
+           update cntList;
+
+        } catch(Exception e) {
+            System.debug(e);
+        }
+    	
+	*/
      
     public void finish(Database.BatchableContext BC) {
         // execute any post-processing operations like sending email
@@ -108,10 +133,31 @@ public class AsynchBatchApex2 implements Database.Batchable<sObject>{
     
     
     /*
-      AsynchBatchApex2 ornek = new AsynchBatchApex2();
+      AsyncBatchApex2 ornek = new AsyncBatchApex2();
 	  Database.executeBatch(ornek, 50);
+
+	// to see Apex Job details
+	
+         Id batchId;
+        AsyncApexJob job = new AsyncApexJob();
+    try{  
+    AsyncBatchApex2 ornek = new AsyncBatchApex2(); 
+        
+    batchId = Database.executeBatch(ornek , 400);
+     job = [SELECT Id, Status, JobItemsProcessed, TotalJobItems, NumberOfErrors 
+                        FROM AsyncApexJob WHERE ID =: batchId ];
+    }catch(exception e){
+        
+    }finally {
+      system.debug('Status >> '+ job.Status);
+    system.debug('NumberOfErrors>> '+ job.NumberOfErrors);  
+    }
+
 	*/
 
-   
+    
+    
+    
+    
     
 }

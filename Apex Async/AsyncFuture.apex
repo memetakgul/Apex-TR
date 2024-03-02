@@ -4,7 +4,7 @@ public class AsynchFutureMethod {
     public STATIC VOID mixedDmlKurtulma(string kullaniciIsimEmail    ){
         //@future method lar sObject almazlar 
         //Genllikle callout icin kullanilir
-        
+        //Mixed DML Exeption icin kullanilir.(setup ve system objectler(non-setup) ayni anda kullanilirsaa)
         account accNew = Utilities.accRecordOlustur();
         
         user newUser =   Utilities.userrecordOlusturur ( kullaniciIsimEmail, 'Soyismi*' , 'russellhigh01@gmail.com');
