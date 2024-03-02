@@ -8,7 +8,7 @@ https://wisequarter-d8-dev-ed.develop.my.salesforce.com/services/apexrest/cases
 
 //Token for Authorization
 //System.debug(System.UserInfo.getSessionId().substring(15));
-//!ARgAQH9tcl3kdI53I.OTX6tou.3xsdJ.K8EhwJ49XvT6pZEC7YpHw01tW4dcQO6vEKItEeO78zWCOyUaqTihVPGDB9zZKePu
+//!ARgAQH9tcl3kdI53I.OTX6tou.3xsdJ.K8EhwJ49XvT6pZEC7YpHw01tW4dcQO6vEKItEeO78zWCOyUaqTih
 //gecici session id. her session a ozel 
 
 //Rest Context Class
