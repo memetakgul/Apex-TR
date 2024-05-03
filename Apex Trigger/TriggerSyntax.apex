@@ -49,7 +49,7 @@ trigger XXXXXXTrigger on XXXXXX (before insert , before update , before delete ,
  if ( Trigger.IsAfter ) {
         if ( Trigger.isInsert)   { }
         if ( Trigger.isUpdate)   { }
-          if ( Trigger.isDelete)   { }
+        if ( Trigger.isDelete)   { }
         if ( Trigger.isUndelete) { }
     
  }  

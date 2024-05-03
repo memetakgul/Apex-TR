@@ -21,8 +21,8 @@ Set<account> set1 = new Set<account>(accList);
   system.debug(set1); 
 
 //  set yapisinda index olmadigi icin 
-//   for loop yapilamaz 
-// bu yuzden SET yapisinda sadece FOR EACH kullanilir
+//  for loop yapilamaz 
+//  bu yuzden SET yapisinda sadece FOR EACH kullanilir
 
 SET<integer> sayilar = new SET<integer>{2,5,76 };
 ///system.debug( sayilar[0] );   SET de index yoktur

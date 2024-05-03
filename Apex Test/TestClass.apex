@@ -268,7 +268,7 @@ public class ContactSayilariTest4DF {
     public class DataFactory {
 
     //genel bir tane Data Factory olur icinde record olusturan bir suru method vardir
-    //Data Factory record olustururken manuel olan fieldlar verilir loopup gibi fieldlar verilmez
+    //Data Factory record olustururken manuel olan fieldlar verilir look up gibi fieldlar verilmez
     
     
    // data for account
